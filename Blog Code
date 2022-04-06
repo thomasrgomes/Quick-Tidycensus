@@ -1,0 +1,60 @@
+# Installing the TidyCensus Package
+install.packages("tidycensus")
+# Load Package
+library(TidyCensus)
+
+# Install Census API Key
+census_api_key("YOUR KEY GOES HERE", install = TRUE)
+
+
+# Create Tables pf Variable Names
+## 2020 Decennial Census Variables
+decennial_2020_vars <- load_variables(
+                              year = 2020, 
+                              "pl", 
+                              cache = TRUE
+                             )
+## 2010 Decennial Census Variables
+decennial_2010_vars <- load_variables(
+                              year = 2010, 
+                              "pl", 
+                              cache = TRUE
+                             )
+## 2016 - 2020 5 Year American Community Survey (ACS) Variables
+acs_20_vars = load_variables(
+                           year = 2020, 
+                           "acs5",
+                           cache = TRUE
+                          )
+
+# Create a list of variables to be called in the core functions
+ desired_vars = c(
+        all = "P2_001N",
+        hisp = "P2_002N",
+        white = "P2_005N",
+        baa = "P2_006N",
+        amin = "P2_007N",
+        asian = "P2_008N",
+        nhopi = "P2_009N",
+        other = "P2_010N",
+        multi = "P2_011N"
+       )
+       
+# Making use of the above object containing variable names      
+census_data = get_decennial(
+  geography = "county",
+  state = "NC",
+  variables = vars_reth, <---- here is where I am using the list
+  summary_var = "P2_001N", <--- creates a column w/'total' variable
+  year = 2020,
+  sumfile = "pl"
+)
+
+
+
+# Income Data by County for North Carolina
+nc_county_income = get_acs(
+                      geography = "county",
+                      state = "NC",
+                      table = "B19001")
+## Note that leaving the 'year' argument blank tells the API to return the most recent year available. As of writing this, that is 2020 for both the ACS and Decennial Census.
