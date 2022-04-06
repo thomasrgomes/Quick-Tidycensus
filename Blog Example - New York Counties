@@ -1,0 +1,26 @@
+# Load Libraries
+library(tidycensus)
+library(tidyverse)
+
+# Load Your API Key 9if needed)
+census_api_key("YOUR KEY GOES HERE", install = TRUE)
+
+# Select Variables
+desired_vars = c(
+        all = "P2_001N", # All Residents
+        hisp = "P2_002N", # Hispanic
+        white = "P2_005N", # White
+        baa = "P2_006N", # Black or African American
+        amin = "P2_007N", # Native American(American Indian in data)
+        asian = "P2_008N", # Asian
+        nhopi = "P2_009N", # Native Hawaiian or Pacific Islander
+        other = "P2_010N", # Some Other Race
+        multi = "P2_011N" # Two or More Races
+       )
+reth_NY_20 = get_decennial(
+  geography = "county",
+  state = "NY",
+  variables = desired_vars,
+  summary_var = "P2_001N", # Same as 'All'
+  year = 2020
+)
